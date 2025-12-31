@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treatment | Calfa Salon</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<!-- BOOKING MODAL -->
+<div id="bookingModal"
+     class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+
+  <!-- MODAL BOX -->
+  <div class="bg-white rounded-xl w-full max-w-md relative
+              max-h-[90vh] overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center p-5 border-b">
+      <h3 class="text-xl font-bold">Booking Treatment</h3>
+      <button onclick="closeBooking()"
+              class="text-gray-500 text-2xl leading-none">✕</button>
+    </div>
+
+    <!-- BODY (SCROLLABLE) -->
+    <div class="p-5 overflow-y-auto max-h-[75vh]">
+
+      <form onsubmit="sendBooking(event)">
+        <input type="hidden" id="treatmentName">
+        <input type="hidden" id="treatmentPrice">
+
+        <!-- NAMA -->
+        <div class="mb-4">
+          <label class="text-sm">Nama Lengkap</label>
+          <input id="name" required
+                 placeholder="Masukkan nama lengkap"
+                 class="w-full border px-3 py-2 rounded-md">
+        </div>
+
+        <!-- TANGGAL -->
+        <div class="mb-4">
+          <label class="text-sm">Tanggal Booking</label>
+          <input id="date" type="date" required
+                 class="w-full border px-3 py-2 rounded-md">
+        </div>
+
+        <!-- JAM -->
+        <div class="mb-4">
+          <label class="text-sm">Jam Booking</label>
+          <input id="time" type="time" required
+                 class="w-full border px-3 py-2 rounded-md">
+        </div>
+
+        <!-- GENDER -->
+        <div class="mb-4">
+          <label class="text-sm">Gender</label>
+          <select id="gender" required
+                  class="w-full border px-3 py-2 rounded-md">
+            <option value="">-- Pilih Gender --</option>
+            <option value="Wanita">Wanita</option>
+            <option value="Pria">Pria</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+  <label class="text-sm">Pilih Hairstylist</label>
+  <select id="hairstylist" required class="w-full border px-3 py-2 rounded-md">
+    <option value="">-- Pilih Hairstylist --</option>
+    <option value="Calfa Owner">Calfa Owner</option>
+    <option value="Dina Hair Stylist">Dina Hair Stylist</option>
+    <option value="Rina Hair Stylist">Rina Hair Stylist</option>
+    <option value="Bebas (Rekomendasi Salon)">Bebas (Rekomendasi Salon)</option>
+  </select>
+</div>
+
+
+        <!-- CATATAN -->
+        <div class="mb-4">
+          <label class="text-sm">Catatan (opsional)</label>
+          <textarea id="note"
+                    placeholder="Contoh: rambut panjang, hijab, dll"
+                    class="w-full border px-3 py-2 rounded-md"></textarea>
+        </div>
+
+        <!-- INFO DP -->
+        <div class="mb-5 p-3 bg-pink-50 border border-pink-200 rounded-md text-sm">
+          <p class="font-semibold text-pink-600 mb-1">Informasi Booking</p>
+          <p>• Booking dikenakan <b>DP minimal Rp 50.000</b></p>
+          <p>• Transfer ke rekening berikut:</p>
+          <p class="mt-1 font-medium">
+            BCA<br>
+            1234567890<br>
+            a.n Calfa Salon
+          </p>
+          <p class="text-xs text-gray-500 mt-2">
+            Booking diproses setelah DP diterima
+          </p>
+        </div>
+
+        <!-- UPLOAD BUKTI TRANSFER -->
+<div class="mb-4">
+  <label class="text-sm">Upload Bukti Transfer (DP)</label>
+  <input type="file"
+         id="proof"
+         accept="image/*"
+         required
+         class="w-full border px-3 py-2 rounded-md">
+  <p class="text-xs text-gray-500 mt-1">
+    Format JPG / PNG • Max 2MB
+  </p>
+</div>
+
+<!-- PREVIEW -->
+<img id="preview"
+     class="hidden w-full h-40 object-contain border rounded-md mt-2">
+
+
+        <!-- BUTTON -->
+        <button type="submit"
+                class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+          BOOK VIA WHATSAPP
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+function openBooking(treatment, price) {
+  document.getElementById('treatmentName').value = treatment;
+  document.getElementById('treatmentPrice').value = price;
+  document.getElementById('bookingModal').classList.remove('hidden');
+  document.getElementById('bookingModal').classList.add('flex');
+}
+
+function closeBooking() {
+  document.getElementById('bookingModal').classList.add('hidden');
+  document.getElementById('bookingModal').classList.remove('flex');
+}
+
+function sendBooking(e) {
+  e.preventDefault();
+
+  const name      = document.getElementById('name').value;
+  const date      = document.getElementById('date').value;
+  const time      = document.getElementById('time').value;
+  const gender    = document.getElementById('gender').value;
+  const hairstylist = document.getElementById('hairstylist').value;
+  const note      = document.getElementById('note').value;
+  const treatment = document.getElementById('treatmentName').value;
+  const price     = document.getElementById('treatmentPrice').value;
+
+  const message =
+`Halo Calfa Salon 👋
+Saya ingin melakukan booking treatment dengan detail berikut:
+
+Nama      : ${name}
+Tanggal  : ${date}
+Jam      : ${time}
+Gender   : ${gender}
+
+Hairstylist  : ${hairstylist}
+Treatment: ${treatment}
+Harga    : Rp ${price}
+
+Saya sudah melakukan DP Rp 50.000.
+Bukti transfer akan saya kirimkan setelah ini.
+
+Catatan:
+${note || '-'}
+
+Terima kasih 🙏`;
+
+  alert("Booking berhasil! Anda akan diarahkan ke WhatsApp untuk mengirim bukti transfer.");
+
+  window.open(
+    `https://wa.me/6282224422295?text=${encodeURIComponent(message)}`,
+    '_blank'
+  );
+
+  closeBooking();
+}
+
+// preview gambar
+document.getElementById('proof').addEventListener('change', function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const preview = document.getElementById('preview');
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove('hidden');
+});
+
+</script>
+
+
+
+
+<body class="bg-white text-black">
+
+<header class="fixed top-0 left-0 w-full flex items-center justify-between px-6 py-4 bg-black z-30">
+  <img src="images/logocal.png" class="h-9 md:h-10">
+
+  <nav class="hidden md:flex flex-1 justify-center space-x-10 text-xs uppercase text-white">
+    <a href="index.html" class="hover:text-gray-300">Home</a>
+    <a href="treatment.html" class="text-pink-500">Treatment</a>
+    <a href="kursus.html" class="hover:text-gray-300">Kursus</a>
+    <a href="about.html" class="hover:text-gray-300">About</a>
+  </nav>
+
+  <div class="flex items-center space-x-3">
+    <button id="burgerBtn" class="md:hidden text-white">
+      <svg id="burgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <a href="https://wa.me/6282224422295" target="_blank"
+       class="bg-pink-600 hover:bg-pink-700 text-white text-xs px-4 py-2 rounded-md">
+      CONTACT
+    </a>
+  </div>
+</header>
+
+<div id="mobileMenu"
+ class="md:hidden fixed top-[64px] left-0 w-full bg-black
+ text-white flex flex-col items-center space-y-4
+ max-h-0 opacity-0 overflow-hidden z-40 transition-all duration-300">
+
+  <a href="index.html">Home</a>
+  <a href="treatment.html" class="text-pink-500">Treatment</a>
+  <a href="kursus.html">Kursus</a>
+  <a href="about.html">About</a>
+</div>
+
+<!-- HERO -->
+<section class="relative">
+  <img src="images/salon.jpeg"
+       class="w-full h-[350px] object-cover brightness-50">
+
+  <div class="absolute inset-0 flex items-center px-6 md:px-20 text-white">
+    <div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-3">
+        Our Signature Treatments
+      </h2>
+      <p class="text-gray-200 max-w-md text-sm">
+        Experience premium beauty treatments handled by professional therapists
+        with high-quality products.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TREATMENT LIST -->
+<section class="py-20 px-6 md:px-20">
+
+  <p class="text-gray-400 uppercase text-sm mb-3">Calfa Salon</p>
+  <h2 class="text-3xl font-bold mb-14">Beauty & Hair Treatments</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+
+    <!-- TREATMENT CARD -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/hairstyling.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Hair Styling</h3>
+      <p class="text-sm text-gray-600">
+        Haircut, coloring, smoothing, hair spa
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 150.000
+      </p>
+
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+    <!-- TREATMENT 2 -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/facial.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Facial Treatment</h3>
+      <p class="text-sm text-gray-600">
+        Brightening, acne care, anti-aging
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 120.000
+      </p>
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+    <!-- TREATMENT 3 -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/nail.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Nail & Spa</h3>
+      <p class="text-sm text-gray-600">
+        Manicure, pedicure, nail art, body spa
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 100.000
+      </p>
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+    <!-- TREATMENT 4 -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/cream-bath.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Creambath</h3>
+      <p class="text-sm text-gray-600">
+        Hair nourishment & relaxation therapy
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 80.000
+      </p>
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+    <!-- TREATMENT 5 -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/makeup.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Make Up Artist</h3>
+      <p class="text-sm text-gray-600">
+        Wedding, graduation & event makeup
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 300.000
+      </p>
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+    <!-- TREATMENT 6 -->
+    <div class="border rounded-xl p-5 hover:shadow-lg transition">
+      <img src="images/spa.jpeg"
+           class="w-full h-44 object-cover rounded-md mb-4">
+      <h3 class="text-lg font-semibold">Body Spa</h3>
+      <p class="text-sm text-gray-600">
+        Relaxation & body treatment therapy
+      </p>
+      <p class="text-pink-600 font-semibold mt-2">
+        Start from Rp 200.000
+      </p>
+      <button
+  onclick="openBooking('Hair Styling','150000')"
+  class="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md">
+  BOOK NOW
+</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-pink-50 py-16 px-6 md:px-20 flex flex-col md:flex-row gap-6 justify-between items-center">
+  <div>
+    <h2 class="text-3xl font-bold mb-2">
+      Ready to Look More Beautiful?
+    </h2>
+    <p class="text-gray-600 text-sm">
+      Book your treatment now via WhatsApp
+    </p>
+  </div>
+
+  <a href="https://wa.me/6282224422295" target="_blank"
+     class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3">
+    Book via WhatsApp
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-black text-white px-6 md:px-20 py-12">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+   <!-- LOCATION -->
+    <div>
+      <img src="images/logocal.png" class="h-12 md:h-10 mb-3 ml-9">
+      <p>Calfa Beauty Salon</p>
+      <p>Surabaya, Indonesia</p>
+    </div>
+
+    <!-- CONTACT -->
+    <div>
+      <h3 class="font-bold mb-4 text-lg">Contact</h3>
+      <p class="mb-2">WhatsApp: <a href="https://wa.me/6282224422295" target="_blank" class="text-pink-500 hover:underline">+62 812-3456-7890</a></p>
+      <p class="mb-2">Email: <a href="calfasalon@gmail.com" class="text-pink-500 hover:underline">info@calfa.com</a></p>
+      <p>Open: Mon-Sat, 09:00 - 20:00</p>
+    </div>
+
+    <!-- SOCIAL MEDIA -->
+    <div>
+      <h3 class="font-bold mb-4 text-lg">Follow Us</h3>
+      <div class="flex space-x-4 mt-2">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/calfasalonsurabaya/?__pwa=1" target="_blank" class="hover:text-pink-500 transition">
+          <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.056 1.957.247 2.416.415a4.92 4.92 0 011.773 1.03 4.92 4.92 0 011.03 1.774c.168.459.36 1.246.416 2.415.058 1.267.07 1.65.07 4.851s-.012 3.584-.07 4.85c-.056 1.17-.248 1.957-.416 2.416a4.92 4.92 0 01-1.03 1.773 4.92 4.92 0 01-1.774 1.03c-.459.168-1.246.36-2.416.416-1.267.058-1.65.07-4.851.07s-3.584-.012-4.85-.07c-1.17-.056-1.957-.248-2.416-.416a4.92 4.92 0 01-1.773-1.03 4.92 4.92 0 01-1.03-1.774c-.168-.459-.36-1.246-.416-2.416-.058-1.267-.07-1.65-.07-4.851s.012-3.584.07-4.85c.056-1.17.248-1.957.416-2.416a4.92 4.92 0 011.03-1.773 4.92 4.92 0 011.774-1.03c.459-.168 1.246-.36 2.416-.416C8.416 2.212 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.523.012-4.762.07-1.034.049-1.596.216-1.968.36a3.092 3.092 0 00-1.123.73 3.092 3.092 0 00-.73 1.123c-.145.372-.311.934-.36 1.968-.058 1.239-.07 1.611-.07 4.762s.012 3.523.07 4.762c.049 1.034.216 1.596.36 1.968.168.391.39.735.73 1.123.388.34.732.562 1.123.73.372.145.934.311 1.968.36 1.239.058 1.611.07 4.762.07s3.523-.012 4.762-.07c1.034-.049 1.596-.216 1.968-.36a3.092 3.092 0 001.123-.73 3.092 3.092 0 00.73-1.123c.145-.372.311-.934.36-1.968.058-1.239.07-1.611.07-4.762s-.012-3.523-.07-4.762c-.049-1.034-.216-1.596-.36-1.968a3.092 3.092 0 00-.73-1.123 3.092 3.092 0 00-1.123-.73c-.372-.145-.934-.311-1.968-.36-1.239-.058-1.611-.07-4.762-.07zm0 3a6 6 0 110 12 6 6 0 010-12zm0 1.8a4.2 4.2 0 100 8.4 4.2 4.2 0 000-8.4zm5.4-.9a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z"/>
+          </svg>
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@calfasalonsurabaya?_r=1&_t=ZS-92W6OXJQEJ2" target="_blank" class="hover:text-pink-500 transition">
+          <svg class="w-6 h-6 fill-current" viewBox="0 0 48 48">
+            <path d="M35.08,16.62a12.12,12.12,0,0,1-6.54-2.06v12.16a9.33,9.33,0,1,1-9.33-9.33V35.7a14.62,14.62,0,1,0,14.62-14.62Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-gray-400 text-xs mt-10 text-center">© 2025 Calfa Beauty Salon. All rights reserved.</p>
+</footer>
+
+</body>
+<script>
+/* ===== BURGER MENU ===== */
+const burgerBtn  = document.getElementById('burgerBtn');
+const burgerIcon = document.getElementById('burgerIcon');
+const mobileMenu = document.getElementById('mobileMenu');
+
+burgerBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('max-h-0');
+  mobileMenu.classList.toggle('max-h-screen');
+  mobileMenu.classList.toggle('py-4');
+  mobileMenu.classList.toggle('opacity-0');
+  mobileMenu.classList.toggle('opacity-100');
+
+  if (burgerIcon.innerHTML.includes('M4 6h16')) {
+    burgerIcon.innerHTML =
+      '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+  } else {
+    burgerIcon.innerHTML =
+      '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+  }
+});
+</script>
+
+</html>
